@@ -80,9 +80,10 @@
                         <button class="btn btn-outline-light btn-lg align-self-center font-weight-bolder mt-4 myLinkBtn" id="login-link">登入</button>
                     </div>
                     <div class="card rounded-right p-4" style="flex-grow: 1.4;">
-                        <h1 class="text-center font-weight-bold text-primary">登入</h1>
+                        <h1 class="text-center font-weight-bold text-primary">註冊</h1>
                         <hr class="my-3">
                         <form action="#" method="post" class="px-3" id="register-form">
+                        <div id="regAlert"></div>
                         <div class="input-group input-group-lg form-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-0">
@@ -222,7 +223,11 @@ $(document).ready(function(){
                     method: 'post',
                     data: $("#register-form").serialize()+'&action=register',
                     success:function(response){
-                        console.log(response);
+                        if(response === 'register'){
+                            window.location = 'home.php';
+                        }else{
+                            $("#regAlert").html(response);
+                        }
                     }
                 });
             }
