@@ -2,6 +2,8 @@
 // vscode會報錯請記得下載phpcs
 class Database
 {
+    const USERNAME = 'ttuttu834@gmail.com';
+    const PASSWORD = '';
     private $dsn = "mysql:host=127.0.0.1;dbname=db_user_system";
     private $dbuser = "root";
     private $dbpass = "";

@@ -155,7 +155,7 @@ if (isset($_SESSION['user'])) {
             <div class="col-lg-10 my-auto">
                 <div class="card-group myShadow">
                     <div class="card justify-content-center rounded-left myColor p-4">
-                        <h1 class="text-center font-weight-bold text-white">密碼重置</h1>
+                        <h1 class="text-center font-weight-bold text-white">回登入頁面</h1>
                         <hr class="my-3 bg-light myHr">
 
                         <button class="btn btn-outline-light btn-lg align-self-center font-weight-bolder mt-4 myLinkBtn" id="back-link">Back</button>
@@ -165,6 +165,7 @@ if (isset($_SESSION['user'])) {
                         <hr class="my-3">
                         <p class="lead text-center text-secondary">為了重置密碼，請輸入email</p>
                         <form action="#" method="post" class="px-3" id="forgot-form">
+                        <div id="forgotAlert"></div>
                             <div class="input-group input-group-lg form-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-0">
@@ -266,6 +267,28 @@ if (isset($_SESSION['user'])) {
                             }
                         }
                     });
+                }
+            });
+            // ==================================================
+            // 忘記密碼Ajax
+            $("#forgot-btn").click(function(e){
+                if ($("#forgot-form")[0].checkValidity()) {
+                    e.preventDefault();
+                    $("#forgot-btn").val('請稍等...');
+
+                    $.ajax({
+                        url: 'assets/php/action.php',
+                        method: 'post',
+                        data: $("#forgot-form").serialize()+'&action=forgot',
+                        success:function(response){
+                            $("#forgot-btn").val('Reset Password');
+                            // 清空email
+                            $("#femail").val("");
+                           console.log(response);
+                            $("#forgotAlert").html(response);
+                        }
+                    });
+                    
                 }
             });
         });
