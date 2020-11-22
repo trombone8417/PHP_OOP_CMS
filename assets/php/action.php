@@ -5,12 +5,11 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
 // Load Composer's autoloader
 require 'vendor/autoload.php';
-
 // Instantiation and passing `true` enables exceptions
 $mail = new PHPMailer(true);
+
 require_once 'auth.php';
 $user = new Auth();
 // 註冊Ajax
@@ -78,9 +77,11 @@ if(isset($_POST['action'])&&$_POST['action']=='forgot'){
          $mail->Password = Database::PASSWORD;
          $mail->SMTPSecure= PHPMailer::ENCRYPTION_STARTTLS;
          $mail->Port = 587;
+         // 寄件者名稱
          $mail->setFrom(Database::USERNAME, 'PHP_OOP_CMS');
          $mail->addAddress($email);
          $mail->isHTML(true);
+         // 標題亂碼處理方式
          $mail->Subject =" =?utf-8?B?" . base64_encode("忘記密碼") . "?=";
          $mail->Body = '<h3>請點選連結重置密碼.<br><a href="http://127.0.0.1/PHP_OOP_CMS/reset-pass.php?email='.$email.'&token='.$token.'">http://127.0.0.1/PHP_OOP_CMS/reset-pass.php?email='.$email.'&token='.$token.'</a><br>敬祝順心<br>系統自動發信</h3>';
          $mail->send();
