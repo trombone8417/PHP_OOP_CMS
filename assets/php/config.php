@@ -2,30 +2,37 @@
 // vscode會報錯請記得下載phpcs
 class Database
 {
+    // Email自動寄信帳號
     const USERNAME = 'ttuttu834@gmail.com';
     const PASSWORD = 'Aa12345*';
-    private $dsn = "mysql:host=127.0.0.1:3308;dbname=db_user_system";
+    // sql資料
+    private $dsn = "mysql:host=127.0.0.1;dbname=db_user_system";
     private $dbuser = "root";
     private $dbpass = "";
     public $conn;
     public function __construct()
     {
         try {
+            // 連接sql
             $this->conn = new PDO($this->dsn, $this->dbuser, $this->dbpass);
             // echo "連接成功";
         } catch (PDOException $e) {
+            // sql錯誤顯示
             echo 'Error: ' . $e->getMessage();
         }
         return $this->conn;
     }
-
+    // 字串處理
     public function test_input($data){
+        // 清除字串前後空白
         $data = trim($data);
+        // 去除字串中多餘的反斜線（\）
         $data = stripslashes($data);
+        // 轉換 HTML 特殊符號為僅能顯示用的編碼
         $data = htmlspecialchars($data);
         return $data;
     }
-    
+    // bootstrap alert   
     public function showMessage($type,$message){
         return '<div class="alert alert-'.$type. ' alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -33,7 +40,4 @@ class Database
         </div>';
     }
 }
-
-// 記得new一個新物件測試
-// $ob = new Database;
 

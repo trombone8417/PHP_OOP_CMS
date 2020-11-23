@@ -41,6 +41,7 @@ class Auth extends Database
     // 忘記密碼
     public function forgot_password($token, $email)
     {
+        // 十分鐘以內重置密碼(token)
         $sql = "UPDATE users SET token = :token, token_expire = DATE_ADD(NOW() , INTERVAL 10 MINUTE) WHERE email = :email";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute(['token'=>$token,'email'=>$email]);
