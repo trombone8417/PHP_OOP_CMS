@@ -17,34 +17,8 @@ require_once 'assets/php/header.php';
           <a href="#" class="btn btn-light" data-toggle="modal" data-target="#addNoteModal"><i class="fas fa-plus-circle fa-lg"></i>&nbsp; Add New Note</a>
         </h5>
         <div class="card-body">
-          <dib class="table-responsive" id="showNote">
-            <table class="table table-striped text-center">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th>Note</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tr>
-                <td>1</td>
-                <td>Web Design</td>
-                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam</td>
-                <td>
-                  <a href="#" title="View Details" class="text-success infoBtn">
-                    <i class="fas fa-info-circle fa-lg"></i>
-                  </a>&nbsp;
-                  <a href="#" title="Edit Note" class="text-primary editBtn">
-                    <i class="fas fa-edit fa-lg"></i>
-                  </a>&nbsp;
-                  <a href="#" title="Delete Note" class="text-danger deleteBtn">
-                    <i class="fas fa-trash-alt fa-lg"></i>
-                  </a>&nbsp;
-                </td>
-              </tr>
-            </table>
-          </dib>
+          <div class="table-responsive" id="showNote">
+         </div>
         </div>
       </div>
     </div>
@@ -59,7 +33,7 @@ require_once 'assets/php/header.php';
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-        <form action="#" method="post" id="add-note-form" class="px-3">
+        <form action="#" method="post" id="add-note-form"  class="px-3">
           <div class="form-group">
             <input type="text" name="title" class="form-control form-control-lg" placeholder="Enter Title" required>
           </div>
@@ -67,17 +41,95 @@ require_once 'assets/php/header.php';
             <textarea name="note" class="form-control form-control-lg" placeholder="Write Your Note Here..."></textarea>
           </div>
           <div class="form-group">
-            <input type="submit" name="addNoteBtn" value="Add Note" class="btn btn-success btn-block btn-lg">
+            <input type="submit" name="addNote" id="addNoteBtn" value="Add Note" class="btn btn-success btn-block btn-lg">
           </div>
-          <!-- 09 23:31 -->
         </form>
       </div>
     </div>
   </div>
 </div>
 <!-- End Add New Note Modal -->
+<!-- Start Edit  Note Modal -->
+<div class="modal fade" id="editNoteModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h4 class="modal-title text-light">Edit Note</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" id="edit-note-form" class="px-3">
+        <input type="hidden" name="id" id="id">
+          <div class="form-group">
+            <input type="text" name="title"  id="title" class="form-control form-control-lg" placeholder="Enter Title" required>
+          </div>
+          <div class="form-group">
+            <textarea name="note" id="note" class="form-control form-control-lg" placeholder="Write Your Note Here..."></textarea>
+          </div>
+          <div class="form-group">
+            <input type="submit" name="editNote" id="editNoteBtn" value="Update Note" class="btn btn-info btn-block btn-lg">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Edit  Note Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js" integrity="sha512-iceXjjbmB2rwoX93Ka6HAHP+B76IY1z0o3h+N1PeDtRSsyeetU3/0QKJqGyPJcX63zysNehggFwMC/bi7dvMig==" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.22/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+ 
+
+// Ajax新增Note
+$("#addNoteBtn").click(function(e){
+  // 驗證欄位
+  if ($("#add-note-form")[0].checkValidity()) {
+    // 取消預設button觸發
+    e.preventDefault();
+    // button文字改成"請稍等..."
+    $("#addNoteBtn").val('請稍等...');
+    $.ajax({
+      url:'assets/php/process.php',
+      method:'post',
+      // 傳送資料
+      data: $("#add-note-form").serialize()+'&action=add_note',
+      // 成功接收資料
+      success:function(response){
+        
+        $("#addNoteBtn").val('Add Note');
+        // 清空表單
+        $("#add-note-form")[0].reset();
+        $("#addNoteModal").modal('hide');
+        Swal.fire({
+          title: 'Note 新增成功',
+          type: 'success'
+        });
+        displayAllNotes();
+      }
+    }); 
+  }
+  
+});
+displayAllNotes();
+    // 列出所有Note
+    function displayAllNotes(){
+      $.ajax({
+      url:'assets/php/process.php',
+      method: 'post',
+      data: {action: 'display_notes'},
+      success:function(response){
+        $("#showNote").html(response);
+        $("table").DataTable({
+          order: [0, 'desc']
+        });
+      }
+    });
+    }
+  });
+</script>
 </body>
-</html>
+</html>  

@@ -282,9 +282,8 @@ if (isset($_SESSION['user'])) {
                         data: $("#forgot-form").serialize()+'&action=forgot',
                         success:function(response){
                             $("#forgot-btn").val('Reset Password');
-                            // 清空email
-                            $("#femail").val("");
-                           console.log(response);
+                            // 清空表單
+                            $("#forgot-form")[0].reset();
                             $("#forgotAlert").html(response);
                         }
                     });
