@@ -78,5 +78,33 @@ class Auth extends Database
         return $result;
     }
 
+    // Edit Note of An User
+    public function edit_note($id){
+        $sql = "SELECT * FROM notes WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    // 更新Note
+    public function update_note($id, $title, $note)
+    {
+        $sql = "UPDATE notes SET title = :title, note = :note, updated_at = NOW() WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['title'=>$title, 'note'=>$note, 'id'=>$id]);
+        return true;
+    }
+    // 刪除Note
+    public function delete_note($id)
+    {
+        $sql = "DELETE FROM notes WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        return true;
+    }
+
 
 }
+  
+
+?>

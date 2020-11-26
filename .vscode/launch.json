@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "request": "attach",
+            "type": "pwa-chrome",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://127.0.0.1/PHP_OOP_CMS",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
