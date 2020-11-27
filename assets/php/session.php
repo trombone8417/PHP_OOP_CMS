@@ -16,6 +16,8 @@ $cgender  = $data['gender'];
 $cdob     = $data['dob'];
 $cphoto   = $data['photo'];
 $created  = $data['created_at'];
+// 時間format
+$reg_on   = date('Y/m/d', strtotime($created));
 $verified = $data['verified'];
 
 $fname = strtok($cname, " ");
