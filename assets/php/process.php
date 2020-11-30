@@ -73,9 +73,52 @@ if (isset($_POST['del_id'])) {
   $id = $_POST['del_id'];
   $cuser->delete_note($id);
 }
+// 編輯Note
 if (isset($_POST['info_id'])) {
   $id = $_POST['info_id'];
   $row = $cuser->edit_note($id);
   echo json_encode($row);
+}
+// 編輯履歷
+if (isset($_FILES['image'])) {
+ $name = $cuser->test_input($_POST['name']);
+ $gender = $cuser->test_input($_POST['gender']);
+ $dob = $cuser->test_input($_POST['dob']);
+ $phone = $cuser->test_input($_POST['phone']);
+
+ $oldImage = $_POST['oldimage'];
+//  圖片上傳地方
+ $folder = 'uploads/';
+ if (isset($_FILES['image']['name']) && ($_FILES['image']['name'] != "")) {
+   $newImage = $folder.$_FILES['image']['name'];
+   move_uploaded_file($_FILES['image']['tmp_name'], $newImage);
+   if ($oldImage != null) {
+     unlink($oldImage);
+   }
+ }
+ else{
+   $newImage = $oldImage;
+ }
+ $cuser->update_profile($name,$gender,$dob,$phone,$newImage, $cid);
+}
+// 更換密碼(履歷)
+if(isset($_POST['action']) && $_POST['action'] == 'change_pass'){
+  $currentPass = $_POST['curpass'];
+  $newPass = $_POST['newpass'];
+  $cnewPass = $_POST['cnewpass'];
+  $hnewPass = password_hash($newPass, PASSWORD_DEFAULT);
+  if($newPass != $cnewPass){
+    echo $cuser->showMessage('danger', 'Password did not matched!');
+  }
+  else{
+    if(password_verify($currentPass, $cpass)){
+      $cuser->change_password($hnewPass,$cid);
+      echo $cuser->showMessage('success','密碼更換成功');
+
+    }
+    else{
+      echo $cuser->showMessage('danger','Current Password is Wrong!');
+    }
+  }
 }
 ?>

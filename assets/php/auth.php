@@ -102,7 +102,21 @@ class Auth extends Database
         $stmt->execute(['id'=>$id]);
         return true;
     }
+    // 編輯履歷
+public function update_profile($name,$gender,$dob,$phone,$photo,$id){
+    $sql = "UPDATE users SET name = :name, gender = :gender, dob = :dob, phone = :phone, photo = :photo WHERE id = :id AND deleted != 0";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['name'=>$name, 'gender'=>$gender, 'dob'=>$dob, 'phone'=>$phone,'photo'=>$photo, 'id'=>$id]);
+    return true;
 
+}
+// 更換密碼(履歷)
+public function change_password($pass,$id){
+    $sql = "UPDATE users SET password = :pass WHERE id = :id AND deleted != 0";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['pass'=>$pass, 'id' =>$id]);
+    return true;
+}
 
 }
   

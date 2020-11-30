@@ -41,7 +41,7 @@ require_once 'assets/php/header.php';
                                     <?php if (!$cphoto) : ?>
                                         <img src="assets/img/profile.png" class="img-thumbnail img-fluid" width="480px">
                                     <?php else : ?>
-                                        <img src="<?= 'assets/img' . $cphoto; ?>" class="img-thumbnail img-fluid" width="480px">
+                                        <img src="<?= 'assets/php/' . $cphoto; ?>" class="img-thumbnail img-fluid" width="480px">
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -54,11 +54,11 @@ require_once 'assets/php/header.php';
                                     <?php if (!$cphoto) : ?>
                                         <img src="assets/img/profile.png" class="img-thumbnail img-fluid" width="480px">
                                     <?php else : ?>
-                                        <img src="<?= 'assets/img' . $cphoto; ?>" class="img-thumbnail img-fluid" width="480px">
+                                        <img src="<?= 'assets/php/' . $cphoto; ?>" class="img-thumbnail img-fluid" width="480px">
                                     <?php endif; ?>
                                 </div>
                                 <div class="card border-danger">
-                                    <form action="" method="post" class="px-3 mt-2" enctype="multipart/form-data">
+                                    <form action="" method="post" class="px-3 mt-2" enctype="multipart/form-data" id="profile-update-form">
                                         <input type="hidden" name="oldimage" value="<?= $cphoto; ?>">
                                         <div class="form-group m-0">
                                             <label for="profilePhoto" class="m-1">上傳照片</label>
@@ -99,10 +99,41 @@ require_once 'assets/php/header.php';
                             </div>
                         </div>
                         <!-- 編輯簡歷結束 -->
-                        <!-- 更新密碼開始 #14 21:37 -->
+                        <!-- 更新密碼開始 -->
                         <div class="tab-pane container fade" id="changePass">
-                            <div class="card-deck"></div>
+                            <div id="changepassAlert"></div>
+                            <div class="card-deck">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white text-center lead">更換密碼</div>
+                                <form action="#" method="post" class="px-3 mt-2" id="change-pass-form">
+                                    <div class="form-group">
+                                        <label for="curpass">輸入現在的密碼</label>
+                                        <input type="password" class="form-control form-control-lg" name="curpass" id="curpass" placeholder="現在的密碼" required minlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newpass">輸入新密碼</label>
+                                        <input type="password" class="form-control form-control-lg" name="newpass" id="newpass" placeholder="新密碼" required minlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cnewpass">確認新密碼</label>
+                                        <input type="password" class="form-control form-control-lg" name="cnewpass" id="cnewpass" placeholder="確認新密碼" required minlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <p id="changepassError" class="text-danger"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" name="changepass" value="Change Password" class="btn btn-success btn-block btn-lg" id="changePassBtn">
+                                    </div>
+
+                                </form>
+                                
+                            </div>
+                            <div class="card border-success align-self-center">
+                                    <img src="assets/img/changePass.jpg" class="img-thumbnail img-fluid" width="408px">
+                                </div>
+                            </div>
                         </div>
+
                         <!-- 更新密碼結束 -->
                     </div>
                 </div>
@@ -113,6 +144,51 @@ require_once 'assets/php/header.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js" integrity="sha512-iceXjjbmB2rwoX93Ka6HAHP+B76IY1z0o3h+N1PeDtRSsyeetU3/0QKJqGyPJcX63zysNehggFwMC/bi7dvMig==" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+<script type="text/javascript">
+$(document).ready(function(){
+    // 更新履歷Ajax
+    $("#profile-update-form").submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url:'assets/php/process.php',
+            method: 'post',
+            processData:false,
+            contentType:false,
+            cache:false,
+            data: new FormData(this),
+            success:function(response){
+                // 刷新頁面
+                location.reload();
+            }
+        });
+    });
+    $("#changePassBtn").click(function(e){
+        if($("#change-pass-form")[0].checkValidity()){
+            e.preventDefault();
+            $("#changePassBtn").val('Please Wait...');
+            if($("#newpass").val() != $("#cnewpass").val()){
+                $("#changepassError").text('* 密碼不相符');
+                $("#changePassBtn").val('Change Password');
+            }
+            else{
+                $.ajax({
+                    url:'assets/php/process.php',
+                    method:'post',
+                    data: $("#change-pass-form").serialize()+'&action=change_pass',
+                    success:function(response){
+                        $("#changepassAlert").html(response);
+                        $("#changePassBtn").val('Change Password');
+                        $("#changepassError").text('');
+                        $("#change-pass-form")[0].reset();
+
+                    }
+                });
+            }
+        }
+    });
+});
+</script>
+
 </body>
 
 </html>
