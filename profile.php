@@ -19,6 +19,7 @@ require_once 'assets/php/header.php';
                     <div class="tab-content">
                         <!-- 簡歷開始 -->
                         <div class="tab-pane container active" id="profile">
+                            <div id="verifyEmailAlert"></div>
                             <div class="card-deck">
                                 <div class="card border-primary">
                                     <div class="card-header bg-primary text-light text-center lead">
@@ -146,7 +147,7 @@ require_once 'assets/php/header.php';
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 <script type="text/javascript">
 $(document).ready(function(){
-    // 更新履歷Ajax
+    // ============= 更新履歷Ajax ====================
     $("#profile-update-form").submit(function(e){
         e.preventDefault();
         $.ajax({
@@ -162,29 +163,52 @@ $(document).ready(function(){
             }
         });
     });
+    // ==============  換密碼 ========================
     $("#changePassBtn").click(function(e){
         if($("#change-pass-form")[0].checkValidity()){
             e.preventDefault();
+            // 按鈕顯示請稍等
             $("#changePassBtn").val('Please Wait...');
+            // 確認密碼是否相符
             if($("#newpass").val() != $("#cnewpass").val()){
+                // 密碼不相符
                 $("#changepassError").text('* 密碼不相符');
                 $("#changePassBtn").val('Change Password');
             }
             else{
+                // 密碼相符，傳送ajax
                 $.ajax({
                     url:'assets/php/process.php',
                     method:'post',
                     data: $("#change-pass-form").serialize()+'&action=change_pass',
                     success:function(response){
+                        // 顯示bootstrap alert成功或失敗
                         $("#changepassAlert").html(response);
                         $("#changePassBtn").val('Change Password');
+                        // 清空錯誤顯示
                         $("#changepassError").text('');
+                        // 清空表單
                         $("#change-pass-form")[0].reset();
 
                     }
                 });
             }
         }
+    });
+    // 驗證Email
+    $("#verify-email").click(function(e){
+        e.preventDefault();
+        $(this).text('Please Wait...');
+        $.ajax({
+            url:'assets/php/process.php',
+            method:'post',
+            data: {action: 'verify_email'},
+            success:function(response){
+                $("#verifyEmailAlert").html(response);
+                $("#verify-email").text('Verify Now');
+            }
+
+        });
     });
 });
 </script>

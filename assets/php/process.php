@@ -1,5 +1,11 @@
 <?php 
 require_once 'session.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
+$mail = new PHPMailer(true);
 // Handle Add New Note Ajax Request
 if (isset($_POST['action']) && $_POST['action'] == 'add_note') {
     $title = $cuser->test_input($_POST['title']);
@@ -103,8 +109,11 @@ if (isset($_FILES['image'])) {
 }
 // 更換密碼(履歷)
 if(isset($_POST['action']) && $_POST['action'] == 'change_pass'){
+  // 舊密碼
   $currentPass = $_POST['curpass'];
+  // 新密碼
   $newPass = $_POST['newpass'];
+  // 確認新密碼
   $cnewPass = $_POST['cnewpass'];
   $hnewPass = password_hash($newPass, PASSWORD_DEFAULT);
   if($newPass != $cnewPass){
@@ -120,5 +129,41 @@ if(isset($_POST['action']) && $_POST['action'] == 'change_pass'){
       echo $cuser->showMessage('danger','Current Password is Wrong!');
     }
   }
+}
+
+if(isset($_POST['action']) && $_POST['action'] == 'verify_email'){
+  try{
+    // 驗證信箱
+    $mail->Charset='UTF-8';
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    // 寄件者帳號
+    $mail->Username = Database::USERNAME;
+    // 寄件者帳號的密碼
+    $mail->Password = Database::PASSWORD;
+    $mail->SMTPSecure= PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+    // 寄件者名稱
+    $mail->setFrom(Database::USERNAME, 'PHP_OOP_CMS');
+    $mail->addAddress($cemail);
+    $mail->isHTML(true);
+    // 標題亂碼處理方式
+    $mail->Subject =" =?utf-8?B?" . base64_encode("Email驗證") . "?=";
+    // 信件內容
+    $mail->Body = '<h3>請點選連結驗證信箱.<br><a href="http://127.0.0.1/PHP_OOP_CMS/verify-email.php?email='.$cemail.'">http://127.0.0.1/PHP_OOP_CMS/verify-email.php?email='.$cemail.'</a><br>敬祝順心<br>系統自動發信</h3>';
+    $mail->send();
+    echo $cuser->showMessage('success', '請到email驗證您的信箱');
+ }
+ catch(Exception $e){
+    echo $cuser->showMessage('danger','出現錯誤，請再重試一次');
+ }
+}
+
+// Handle Send Feedback to Admin Ajax Request
+if (isset($_POST['action']) && $_POST['action']== 'feedback') {
+$subject = $cuser->test_input($_POST['subject']);
+$feedback = $cuser->test_input($_POST['feedback']);
+$cuser->send_feedback($subject, $feedback,$cid);
 }
 ?>

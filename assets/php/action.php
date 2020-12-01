@@ -29,6 +29,25 @@ if (isset($_POST['action']) && $_POST['action'] == 'register') {
       if ($user->register($name, $email, $hpass)) {
          echo 'register';
          $_SESSION['user'] = $email;
+         $mail->Charset = 'UTF-8';
+         $mail->isSMTP();
+         $mail->Host = 'smtp.gmail.com';
+         $mail->SMTPAuth = true;
+         // 寄件者帳號
+         $mail->Username = Database::USERNAME;
+         // 寄件者帳號的密碼
+         $mail->Password = Database::PASSWORD;
+         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+         $mail->Port = 587;
+         // 寄件者名稱
+         $mail->setFrom(Database::USERNAME, 'PHP_OOP_CMS');
+         $mail->addAddress($email);
+         $mail->isHTML(true);
+         // 標題亂碼處理方式
+         $mail->Subject = " =?utf-8?B?" . base64_encode("Email驗證") . "?=";
+         // 信件內容
+         $mail->Body = '<h3>請點選連結驗證信箱.<br><a href="http://127.0.0.1/PHP_OOP_CMS/verify-email.php?email=' . $email . '">http://127.0.0.1/PHP_OOP_CMS/verify-email.php?email=' . $email . '</a><br>敬祝順心<br>系統自動發信</h3>';
+         $mail->send();
       } else {
          // 其他錯誤
          echo $user->showMessage('danger', 'Something went wrong! try again later!');
@@ -109,5 +128,3 @@ if(isset($_POST['action'])&&$_POST['action']=='forgot'){
       echo $user->showMessage('info', '該e-mail不存在!');
    }
 }
-
-?>
