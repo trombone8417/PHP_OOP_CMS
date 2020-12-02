@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'session.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -10,7 +10,10 @@ $mail = new PHPMailer(true);
 if (isset($_POST['action']) && $_POST['action'] == 'add_note') {
     $title = $cuser->test_input($_POST['title']);
     $note = $cuser->test_input($_POST['note']);
+    // 新增Note
     $cuser->add_new_note($cid,$title,$note);
+    // 新增通知
+    $cuser->notification($cid,'admin','Note added');
 }
 // 列出所有使用者的Note
 if (isset($_POST['action']) && $_POST['action'] == 'display_notes') {
@@ -36,7 +39,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'display_notes') {
             <td>'.$row['title'].'</td>
             <td>'.substr($row['note'],0,75).'...</td>
             <td>
-            
+
               <a href="#" id="'.$row['id'].'" title="View Details" class="text-success infoBtn">
                 <i class="fas fa-info-circle fa-lg"></i>
               </a>&nbsp;
@@ -62,7 +65,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'display_notes') {
 // Handle Edit Note of An User Ajax Request
 if(isset($_POST['edit_id'])){
   $id = $_POST['edit_id'];
-  $row = $cuser->edit_note($id);   
+  $row = $cuser->edit_note($id);
   echo json_encode($row);
 }
 
@@ -73,11 +76,15 @@ if(isset($_POST['action']) && $_POST['action'] == 'update_note'){
   $note = $cuser->test_input(($_POST['note']));
 
   $cuser->update_note($id, $title, $note);
+  // 新增通知
+  $cuser->notification($cid,'admin','Note updated');
 }
 // 刪除Note
 if (isset($_POST['del_id'])) {
   $id = $_POST['del_id'];
   $cuser->delete_note($id);
+  // 新增通知
+  $cuser->notification($cid,'admin','Note deleted');
 }
 // 編輯Note
 if (isset($_POST['info_id'])) {
@@ -106,6 +113,8 @@ if (isset($_FILES['image'])) {
    $newImage = $oldImage;
  }
  $cuser->update_profile($name,$gender,$dob,$phone,$newImage, $cid);
+ // 新增通知
+ $cuser->notification($cid,'admin','Profile updated');
 }
 // 更換密碼(履歷)
 if(isset($_POST['action']) && $_POST['action'] == 'change_pass'){
@@ -123,6 +132,8 @@ if(isset($_POST['action']) && $_POST['action'] == 'change_pass'){
     if(password_verify($currentPass, $cpass)){
       $cuser->change_password($hnewPass,$cid);
       echo $cuser->showMessage('success','密碼更換成功');
+      // 新增通知
+      $cuser->notification($cid,'admin','Password changed');
 
     }
     else{
@@ -165,5 +176,45 @@ if (isset($_POST['action']) && $_POST['action']== 'feedback') {
 $subject = $cuser->test_input($_POST['subject']);
 $feedback = $cuser->test_input($_POST['feedback']);
 $cuser->send_feedback($subject, $feedback,$cid);
+// 新增通知
+$cuser->notification($cid,'admin','Feedback written');
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'fetchNotification') {
+  $notification = $cuser->fetchNotification($cid);
+  $output = '';
+  // 帶出訊息
+  if ($notification) {
+    foreach ($notification as $row) {
+      $output .= '<div class="alert alert-danger" role="alert">
+      <button type="button" id="'.$row['id'].'" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="alert-heading">New Notification</h4>
+      <p class="mb-0 lead">'.$row['message'].'</p>
+      <hr class="my-2">
+      <p class="mb-0 float-left">Reply of feedback from Admin</p>
+      <p class="mb-0 float-right">'.$cuser->timeInAgo($row['created_at']).'</p>
+      <div class="clearfix"></div>
+  </div>';
+    }
+    echo $output;
+  }
+  else{
+    echo '<h3 class="text-center text-secondary my-5">沒有訊息</h3>';
+  }
+}
+// Check Notification
+if (isset($_POST['action']) && $_POST['action']=='checkNotification') {
+  if ($cuser->fetchNotification($cid)) {
+    echo '<i class="fas fa-circle fa-sm text-danger"></i>';
+  }else{
+    echo '';
+  }
+}
+// 刪除通知
+if(isset($_POST['notification_id'])){
+  $id = $_POST['notification_id'];
+  $cuser->removeNotification($id);
 }
 ?>

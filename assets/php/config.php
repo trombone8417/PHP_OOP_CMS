@@ -39,5 +39,34 @@ class Database
         <strong class="text-center">'.$message.'</strong>
         </div>';
     }
+    // 顯示多久前
+    public function timeInAgo($timestamp)
+    {
+        // apache php.ini 也要調整時區 (date.timezone=Asia/Taipei)
+        date_default_timezone_get("Asia/Taipei");
+        $timestamp = strtotime($timestamp) ? strtotime($timestamp) : $timestamp;
+        $time = time() - $timestamp;
+        switch($time){
+            // 秒
+            case $time <= 60:
+                return '現在';
+            // 分鐘
+            case $time >= 60 && $time < 3600:
+                return (round($time/60) == 1)?'一分鐘前':round($time/60).' 分鐘前';
+            // 小時
+            case $time >= 3600 && $time < 86400:
+                return (round($time/3600) == 1)?'一小時前':round($time/3600).' 小時前';
+            // 天
+            case $time >= 86400 && $time < 604800:
+                return (round($time/86400) == 1)?'一天前':round($time/86400).' 天前';
+            // 月
+            case $time >= 2600640 && $time < 631207680:
+                return (round($time/2600640) == 1)?'一月前':round($time/2600640).' 月前';
+            // 年
+            case $time >= 31207680 :
+                return (round($time/31207680) == 1)?'一年前':round($time/31207680).' 年前';
+        }
+
+    }
 }
 
