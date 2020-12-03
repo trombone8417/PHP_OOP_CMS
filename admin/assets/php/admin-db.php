@@ -1,7 +1,7 @@
 <?php
     require_once 'config.php';
     class Admin extends Database{
-        // Admin Login
+        // Admin 使用者登入
         public function admin_login($username,$password)
         {
             $sql = "SELECT username, password FROM admin WHERE username = :username AND password = :password ";

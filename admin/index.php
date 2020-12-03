@@ -56,6 +56,7 @@ if (isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <script type="text/javascript">
     $(document).ready(function() {  
+        // 使用者登入Ajax
         $("#adminLoginBtn").click(function(e){
             e.preventDefault();
             $(this).val('Please Wait...');
@@ -65,8 +66,10 @@ if (isset($_SESSION['username'])) {
                 data: $("#admin-login-form").serialize()+'&action=adminLogin',
                 success:function(response){
                     if (response === 'admin_login') {
+                        // 登入成功，轉到首頁admin-dashboard.php
                         window.location = 'admin-dashboard.php';
                     }else{
+                        // 登入失敗，顯示警訊
                         $("#adminLoginAlert").html(response);
                     }
                     $("#adminLoginBtn").val('Login');
