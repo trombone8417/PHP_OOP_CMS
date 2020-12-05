@@ -15,7 +15,7 @@ $count = new Admin();
                 </div>
             </div>
             <div class="card bg-warning">
-                <div class="card-header">Verfied User</div>
+                <div class="card-header">Verified User</div>
                 <div class="card-body">
                     <h1 class="display-4">
                         <?= $count->verified_users(1); ?>
@@ -34,7 +34,8 @@ $count = new Admin();
                 <div class="card-header">Website Hits</div>
                 <div class="card-body">
                     <h1 class="display-4">
-                        120
+                        <?php $data = $count->site_hits();
+                        echo $data['hits']; ?>
                     </h1>
                 </div>
             </div>
@@ -68,7 +69,6 @@ $count = new Admin();
                     </h1>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -148,7 +148,7 @@ $count = new Admin();
         ]);
 
         var options = {
-            pieHole:0.4,
+            pieHole: 0.4,
         };
         var chart = new google.visualization.PieChart(document.getElementById('chartTwo'));
         chart.draw(data, options);

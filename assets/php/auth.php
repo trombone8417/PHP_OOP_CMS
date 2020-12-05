@@ -90,6 +90,7 @@ class Auth extends Database
         $sql = "SELECT * FROM notes WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute(['id' => $id]);
+        // json_encode data需使用fetch,若用fetchAll要使用data[0]來撈取資料
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }

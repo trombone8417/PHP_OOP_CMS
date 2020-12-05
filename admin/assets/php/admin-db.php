@@ -10,7 +10,7 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return $row;
         }
-        // 計算總數 
+        // 計算總數
         public function totalCount($tablename)
         {
             $sql = "SELECT * FROM $tablename";
@@ -34,17 +34,45 @@
             $sql = "SELECT gender, COUNT(*) AS number FROM users WHERE gender !='' GROUP BY gender";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
+            // fetchAll()比較好用，一次取出所有陣列。直接用foreach ()搭配
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
 
         }
-        // 23 32:05
+        // 驗證人數比例
         public function verifiedPer()
         {
             $sql = "SELECT verified, COUNT(*) AS number FROM users GROUP BY verified";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+        // 首頁造訪量
+        public function site_hits()
+        {
+            $sql = "SELECT hits FROM visitors";
+            $stmt = $this->conn->prepare($sql);
+            $stmt-> execute();
+            $count = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $count;
+        }
+        // 使用者數量
+        public function fetchAllUsers($val)
+        {
+            $sql = "SELECT * FROM users WHERE deleted != $val";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+        // 使用者詳細資料
+        public function fetchUserDetailsByID($id)
+        {
+            $sql = "SELECT * FROM users WHERE id = :id AND deleted !=0";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result;
         }
     }
