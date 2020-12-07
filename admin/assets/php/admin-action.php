@@ -150,3 +150,7 @@
         }
     }
 
+    if (isset($_POST['res_id'])) {
+        $id = $_POST['res_id'];
+        $admin->userAction($id, 1);
+    }

@@ -45,17 +45,16 @@ $(document).ready(function(){
     }
     
 // 恢復使用者的帳號  26 8:23                                                            
-$("body").on("click", ".deleteUserIcon", function(e) {
+$("body").on("click", ".restoreUserIcon", function(e) {
       e.preventDefault();
-      del_id = $(this).attr('id');
+      res_id = $(this).attr('id');
       Swal.fire({
-        title: '確定要刪除嗎?',
-        text: "刪除之後資料無法回復!",
+        title: '確定要回復此使用者嗎?',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: '刪除!',
+        confirmButtonText: '確定',
         cancelButtonText: '取消'
       }).then((result) => {
         if (result.value) {
@@ -63,16 +62,15 @@ $("body").on("click", ".deleteUserIcon", function(e) {
             url: 'assets/php/admin-action.php',
             method: 'post',
             data: {
-              del_id: del_id
+              res_id: res_id
             },
             success: function(response) {
               Swal.fire(
-                '刪除',
-                '刪除成功',
+                '回復',
+                '回復成功',
                 'success'
               )
-              // 更新Notes
-              fetchAllUsers();
+              fetchAllDeletedUsers();
             }
           });
 
