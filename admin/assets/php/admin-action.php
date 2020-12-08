@@ -154,3 +154,54 @@
         $id = $_POST['res_id'];
         $admin->userAction($id, 1);
     }
+
+    if (isset($_POST['action']) && $_POST['action'] == 'fetchAllNotes') {
+        $output = '';
+        // 顯示已刪除帳號使用者
+        $note = $admin->fetchAllNotes();
+        if ($note) {
+            $output .= '<table class="table table-striped table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User Name</th>
+                                    <th>User E-Mail</th>
+                                    <th>Note Title</th>
+                                    <th>Note</th>
+                                    <th>Written On</th>
+                                    <th>Updated On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+                foreach ($note as $row) {
+            $output .=
+            '<tr>
+                <td>'.$row['id'].'</td>
+                <td>'.$row['name'].'</td>
+                <td>'.$row['email'].'</td>
+                <td>'.$row['title'].'</td>
+                <td>'.$row['note'].'</td>
+                <td>'.$row['created_at'].'</td>
+                <td>'.$row['updated_at'].'</td>
+                <td>
+                <a href="#" id="'.$row['id'].'" title="Delete Note" class="text-danger deleteNoteIcon"><i class="fas fa-trash-alt fa-lg"></i></a>
+                </td>                                    
+            </tr>';
+        }
+            $output .= 
+            '</tbody>
+            </table>';
+
+        echo $output;
+        }
+        else{
+            // 沒有使用者的註冊資訊，顯示alert
+            echo '<h3 class="text-center text-secondary">:( No any note wirtten yet!</h3>';
+        }
+    }
+    if (isset($_POST['note_id'])) {
+        $id = $_POST['note_id'];
+        $admin->deleteNoteOfUser($id);
+    }

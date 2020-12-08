@@ -8,7 +8,7 @@ class Database
     // sql資料
     private $dsn = "mysql:host=127.0.0.1;dbname=db_user_system";
     private $dbuser = "root";
-    private $dbpass = "199517";
+    private $dbpass = "";
     public $conn;
     public function __construct()
     {

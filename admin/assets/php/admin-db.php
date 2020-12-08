@@ -83,5 +83,20 @@
             $stmt->execute(['id' => $id]);
             return true;
         }
-        // 27 3:34
+        public function fetchAllNotes()
+        {
+            $sql = "SELECT notes.id, notes.title, notes.note, notes.created_at, notes.updated_at, users.name, users.email FROM notes INNER JOIN users ON notes.uid = users.id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function deleteNoteOfUser($id)
+        {
+            $sql = "DELETE FROM notes WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+            return true;
+        }
     }

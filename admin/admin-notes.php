@@ -17,6 +17,7 @@ require_once 'assets/php/admin-header.php';
         </div>
     </div>
 </div>
+
 <!-- footer -->
         </div>
     </div>
@@ -25,7 +26,7 @@ require_once 'assets/php/admin-header.php';
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
 <script type="text/javascript">
-$(doucument).ready(function(){
+$(document).ready(function(){
 // 呼叫函數(列出Notes)
 fetchAllNotes();
     // 列出Notes
@@ -43,6 +44,42 @@ fetchAllNotes();
             }
         });
     }
+
+    // 刪除使用者                                                              
+    $("body").on("click", ".deleteNoteIcon", function(e) {
+      e.preventDefault();
+      note_id = $(this).attr('id');
+      Swal.fire({
+        title: '確定要刪除嗎?',
+        text: "刪除之後資料無法回復!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '刪除!',
+        cancelButtonText: '取消'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: 'assets/php/admin-action.php',
+            method: 'post',
+            data: {
+              note_id: note_id
+            },
+            success: function(response) {
+              Swal.fire(
+                '刪除',
+                '刪除成功',
+                'success'
+              )
+              // 更新Notes
+              fetchAllNotes();
+            }
+          });
+
+        }
+      })
+    });
 });
 
 </script>   
