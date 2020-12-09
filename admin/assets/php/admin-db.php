@@ -116,11 +116,29 @@
             $stmt->execute(['uid'=>$uid, 'message'=>$message]);
             return true;
         }
+        // 若回覆訊息的話，replied = 1
         public function feedbackReplied($fid)
         {
             $sql = "UPDATE feedback SET replied = 1 WHERE id = :fid";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute(['fid'=>$fid]);
+            return true;
+        }
+        public function fetchNotification()
+        {
+            $sql = "SELECT notification.id, notification.message, notification.created_at,users.name, users.email FROM notification INNER JOIN users ON notification.uid = users.id WHERE type = 'admin' ORDER BY notification.id DESC LIMIT 5";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+        // 刪除通知
+        public function removeNotification($id)
+        {
+            $sql = "DELETE FROM notification WHERE id = :id AND type = 'admin'";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['id'=>$id]);
             return true;
         }
     }

@@ -98,6 +98,17 @@ $count = new Admin();
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+checkNotification()
+function checkNotification(){
+    $.ajax({
+        url:'assets/php/admin-action.php',
+        method: 'post',
+        data:{action: 'checkNotification'},
+        success:function(response){
+            $("#checkNotification").html(response);
+        }
+    });
+}
     // =============  男女比例圖表  ==================
     google.charts.load('current', {
         'packages': ['corechart']

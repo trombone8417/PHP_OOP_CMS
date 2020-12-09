@@ -94,6 +94,17 @@ fetchAllFeedback();
             });
         }
     });
+    checkNotification()
+function checkNotification(){
+    $.ajax({
+        url:'assets/php/admin-action.php',
+        method: 'post',
+        data:{action: 'checkNotification'},
+        success:function(response){
+            $("#checkNotification").html(response);
+        }
+    });
+}
 });
 </script>
 </body>
