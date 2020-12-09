@@ -99,4 +99,28 @@
             $stmt->execute(['id'=>$id]);
             return true;
         }
+        public function fetchFeedback()
+        {
+            $sql = "SELECT feedback.id, feedback.subject, feedback.feedback, feedback.created_at, feedback.uid, users.name, users.email FROM feedback INNER JOIN users ON feedback.uid = users.id WHERE replied != 1 ORDER BY feedback.id DESC";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        // 回覆訊息
+        public function replyFeedback($uid, $message)
+        {
+            $sql = "INSERT INTO notification(uid, type, message) VALUES (:uid, 'user', :message)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['uid'=>$uid, 'message'=>$message]);
+            return true;
+        }
+        public function feedbackReplied($fid)
+        {
+            $sql = "UPDATE feedback SET replied = 1 WHERE id = :fid";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['fid'=>$fid]);
+            return true;
+        }
     }
