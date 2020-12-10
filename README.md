@@ -11,10 +11,10 @@ Xdebug
 F12 console
 
 ##結果
-![alt 登入頁面](md-img\登入頁面.JPG)
-![alt 首頁](md-img\首頁.JPG)
-![alt admin登入頁面](md-img\admin登入頁面.JPG)
-![alt admin首頁](md-img\admin首頁.JPG)
+![alt 登入頁面](md-img/登入頁面.JPG)
+![alt 首頁](md-img/首頁.JPG)
+![alt admin登入頁面](md-img/admin登入頁面.JPG)
+![alt admin首頁](md-img/admin首頁.JPG)
 
 資料來源：
 YOUTUBE平台
