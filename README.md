@@ -15,6 +15,7 @@ F12 console
 ![alt 首頁](md-img/首頁.JPG)
 ![alt admin登入頁面](md-img/admin登入頁面.JPG)
 ![alt admin首頁](md-img/admin首頁.JPG)
+![alt sql](md-img/sql.JPG)
 
 資料來源：
 YOUTUBE平台
