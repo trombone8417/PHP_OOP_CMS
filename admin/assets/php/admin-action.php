@@ -293,3 +293,38 @@ if (isset($_POST['notification_id'])) {
     $id = $_POST['notification_id'];
     $admin->removeNotification($id);
 }
+
+// 匯出所有使用者的Excel 30 8:46
+if (isset($_GET['export']) && $_GET['export'] == 'excel') {
+    header("Content-Type: application/xls");
+    header("Content-Disposition: attachment; filename=users.xls");
+    header("Expires: 0");
+    $data = $admin->exportAllUser();
+    echo '<table border="1" align=center>';
+    
+    echo '<tr>
+    <th>#</th>
+    <th>Name</th>
+    <th>E-Mail</th>
+    <th>Phone</th>
+    <th>Gender</th>
+    <th>DOB</th>
+    <th>Joined ON</th>
+    <th>Verified</th>
+    <th>Deleted</th>
+    </tr>';
+    foreach ($data as $row ) {
+        echo '<tr>
+        <td>'.$row['id'].'</td>
+        <td>'.$row['name'].'</td>
+        <td>'.$row['email'].'</td>
+        <td>'.$row['phone'].'</td>
+        <td>'.$row['gender'].'</td>
+        <td>'.$row['dob'].'</td>
+        <td>'.$row['created_at'].'</td>
+        <td>'.$row['verified'].'</td>
+        <td>'.$row['deleted'].'</td>
+        </tr>';
+    }
+    echo '</table>';
+}

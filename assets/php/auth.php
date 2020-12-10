@@ -39,6 +39,7 @@ class Auth extends Database
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row;
     }
+    
 
     // 忘記密碼
     public function forgot_password($token, $email)

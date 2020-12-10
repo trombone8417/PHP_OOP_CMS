@@ -128,3 +128,10 @@ if(isset($_POST['action'])&&$_POST['action']=='forgot'){
       echo $user->showMessage('info', '該e-mail不存在!');
    }
 }
+// 確認使用者是否刪除帳號，若刪除帳號的話，導回登入頁面
+if (isset($_POST['action']) && $_POST['action'] == 'checkUser') {
+   if (!$user->currentUser($_SESSION['user'])) {
+       echo 'bye';
+       unset($_SESSION['user']);
+   }
+}

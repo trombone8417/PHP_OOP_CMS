@@ -133,6 +133,7 @@
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         }
+
         // 刪除通知
         public function removeNotification($id)
         {
@@ -140,5 +141,14 @@
             $stmt = $this->conn->prepare($sql);
             $stmt->execute(['id'=>$id]);
             return true;
+        }
+
+        public function exportAllUser()
+        {
+            $sql = "SELECT * FROM users";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
         }
     }
