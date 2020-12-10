@@ -12,8 +12,9 @@ require_once 'assets/php/admin-header.php';
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        // 呼叫函數
         fetchNotification();
-
+        // 列出訊息
         function fetchNotification() {
             $.ajax({
                 url: 'assets/php/admin-action.php',
@@ -26,9 +27,9 @@ require_once 'assets/php/admin-header.php';
                 }
             });
         }
-
+        // 呼叫函數
         checkNotification()
-
+        // 訊息通知
         function checkNotification() {
             $.ajax({
                 url: 'assets/php/admin-action.php',
@@ -41,15 +42,20 @@ require_once 'assets/php/admin-header.php';
                 }
             });
         }
-        $("body").on("click", ".close", function(e){
+        // 刪除訊息
+        $("body").on("click", ".close", function(e) {
             e.preventDefault();
             notification_id = $(this).attr('id');
             $.ajax({
                 url: 'assets/php/admin-action.php',
-                method:'post',
-                data: { notification_id: notification_id },
-                success:function(response){
+                method: 'post',
+                data: {
+                    notification_id: notification_id
+                },
+                success: function(response) {
+                    // 列出訊息
                     fetchNotification();
+                    // 訊息通知
                     checkNotification();
                 }
             });

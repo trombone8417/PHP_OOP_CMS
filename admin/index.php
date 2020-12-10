@@ -29,20 +29,21 @@ if (isset($_SESSION['username'])) {
             <div class="col-lg-5">
                 <div class="card border-danger shadow-lg">
                     <div class="card-header bg-danger">
-                        <h3 class="m-0 text-white"><i class="fas fa-user-cog">&nbsp;Admin Panel Login</i></h3>
+                        <h3 class="m-0 text-white"><i class="fas fa-user-cog">&nbsp;使用者管理介面登入</i></h3>
                     </div>
                     <div class="card-body">
                         <form action="" method="post" class="px-3" id="admin-login-form">
                             <!-- 錯誤訊息提示 -->
                             <div id="adminLoginAlert"></div>
                             <div class="form-group">
-                                <input type="text" name="username" class="form-control form-control-lg rounded-0" placeholder="Username" required autofocus>
+                            <!-- autofocus 在一開始網頁載入時預設的焦點控制項 -->
+                                <input type="text" name="username" class="form-control form-control-lg rounded-0" placeholder="使用者名稱" required autofocus>
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password" class="form-control form-control-lg rounded-0" placeholder="Password" required>
+                                <input type="password" name="password" class="form-control form-control-lg rounded-0" placeholder="密碼" required>
                             </div>
                             <div class="form-group">
-                                <input type="submit" name="admin-login" class="btn btn-danger btn-block btn-lg rounded-0" value="Login" id="adminLoginBtn">
+                                <input type="submit" name="admin-login" class="btn btn-danger btn-block btn-lg rounded-0" value="登入" id="adminLoginBtn">
                             </div>
                         </form>
                     </div>
@@ -59,7 +60,7 @@ if (isset($_SESSION['username'])) {
         // 使用者登入Ajax
         $("#adminLoginBtn").click(function(e){
             e.preventDefault();
-            $(this).val('Please Wait...');
+            $(this).val('請稍等...');
             $.ajax({
                 url: 'assets/php/admin-action.php',
                 method: 'post',
@@ -72,7 +73,7 @@ if (isset($_SESSION['username'])) {
                         // 登入失敗，顯示警訊
                         $("#adminLoginAlert").html(response);
                     }
-                    $("#adminLoginBtn").val('Login');
+                    $("#adminLoginBtn").val('登入');
                 }
             });
         });

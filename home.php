@@ -10,15 +10,15 @@ require_once 'assets/php/header.php';
           <strong>您的Email未驗證，請到Email信箱點選驗證的連結</strong>
         </div>
       <?php endif; ?>
-      <h4 class="text-center text-primary mt-2">Write Your Notes Here & Access Anytime Anywhere!</h4>
+      <h4 class="text-center text-primary mt-2">歡迎寫下任何訊息</h4>
       <div class="card border-primary">
         <h5 class="card-header bg-primary d-flex justify-content-between">
-          <span class="text-light lead align-self-center">All Notes</span>
-          <a href="#" class="btn btn-light" data-toggle="modal" data-target="#addNoteModal"><i class="fas fa-plus-circle fa-lg"></i>&nbsp; Add New Note</a>
+          <span class="text-light lead align-self-center">Notes總表</span>
+          <a href="#" class="btn btn-light" data-toggle="modal" data-target="#addNoteModal"><i class="fas fa-plus-circle fa-lg"></i>&nbsp; 寫下新的Note</a>
         </h5>
         <div class="card-body">
           <div class="table-responsive" id="showNote">
-          <p class="text-center lead mt-5">Please Wait...</p>
+          <p class="text-center lead mt-5">請稍等...</p>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@ require_once 'assets/php/header.php';
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-info">
-        <h4 class="modal-title text-light">Edit Note</h4>
+        <h4 class="modal-title text-light">編輯 Note</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">

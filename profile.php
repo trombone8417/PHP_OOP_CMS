@@ -8,11 +8,11 @@ require_once 'assets/php/header.php';
                 <div class="card-header border-primary">
                     <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <a href="#profile" class="nav-link active font-weight-bold" data-toggle="tab">Profile</a></li>
+                            <a href="#profile" class="nav-link active font-weight-bold" data-toggle="tab">履歷</a></li>
                         <li class="nav-item">
-                            <a href="#editProfile" class="nav-link  font-weight-bold" data-toggle="tab">Edit Profile</a></li>
+                            <a href="#editProfile" class="nav-link  font-weight-bold" data-toggle="tab">編輯履歷</a></li>
                         <li class="nav-item">
-                            <a href="#changePass" class="nav-link  font-weight-bold" data-toggle="tab">Change Password</a></li>
+                            <a href="#changePass" class="nav-link  font-weight-bold" data-toggle="tab">更換密碼</a></li>
                     </ul>
                 </div>
                 <div class="card-body">
